@@ -12,9 +12,11 @@ import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.util.Log;
 
 public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
+
     private WifiP2pManager manager;
     private Channel channel;
     private Activity activity;
+    private GPSTracker tracker;
 
     public WiFiDirectBroadcastReceiver(WifiP2pManager manager, Channel channel,
                                        Activity activity) {
@@ -32,6 +34,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             if (manager == null) {
                 return;
             }
+
             NetworkInfo networkInfo = (NetworkInfo) intent
                     .getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
             if (networkInfo.isConnected()) {
@@ -46,6 +49,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
             }
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION
                 .equals(action)) {
+
             WifiP2pDevice device = (WifiP2pDevice) intent
                     .getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
             Log.d(WiFiServiceDiscoveryActivity.TAG, "Device status -" + device.status);

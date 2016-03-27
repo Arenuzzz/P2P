@@ -9,11 +9,11 @@
     </style>
     <style name="boldText">
         <item name="android:textStyle">bold|italic</item>
-        <item name="android:textColor">#000ecc</item>
+        <item name="android:textColor">#03a100</item>
     </style>
     <style name="normalText">
         <item name="android:textStyle">normal</item>
-        <item name="android:textColor">#f1cb0c</item>
+        <item name="android:textColor">#0600a9</item>
     </style>
 
 </resources>

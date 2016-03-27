@@ -79,6 +79,7 @@ public class WiFiServiceDiscoveryActivity extends FragmentActivity implements
         this.handler = handler;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,8 +91,6 @@ public class WiFiServiceDiscoveryActivity extends FragmentActivity implements
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
         manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
-//        btnShowLocation = (Button)findViewById(R.id.location);
-//        btnShowLocation.setOnClickListener(this);
         channel = manager.initialize(this, getMainLooper(), null);
         startRegistrationAndDiscovery();
         servicesList = new WiFiDirectServicesList();
@@ -99,18 +98,29 @@ public class WiFiServiceDiscoveryActivity extends FragmentActivity implements
                 .add(R.id.container_root, servicesList, "services").commit();
 
         gps = new GPSTracker(this);
-        locationTxt.setText("Longitude: " + gps.getLongitude() + " Latitude: " + gps.getLatitude() + " ");
+        gps.getLocation(this);
+        handler.removeCallbacks(LocationUpdaterRunnable);
+        // Добавляем Runnable-объект timeUpdaterRunnable в очередь
+        // сообщений, объект должен быть запущен после задержки в 100 мс
+        handler.postDelayed(LocationUpdaterRunnable, 100);
 
-        //GPSTracker gsp = new GPSTracker(this);
-        //gsp.Show();
-//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-//                .findFragmentById(R.id.map);
-//        mapFragment.getMapAsync(this);
-//        Toast.makeText(getApplicationContext(),"Долгота: " +gps.getLocation(this).getLongitude()
-//                +" Широта: " +gps.getLocation(this).getLatitude(),Toast.LENGTH_LONG).show();
+
 
     }
+    private Runnable LocationUpdaterRunnable = new Runnable() {
+        public void run() {
+            locationTxt.setText("Longitude: " + gps.getLongitude() + " Latitude: " + gps.getLatitude() + " ");
+            handler.postDelayed(this, 200);
+        }
+    };
+    @Override
+    public void onResume() {
+        super.onResume();
+        receiver = new WiFiDirectBroadcastReceiver(manager, channel, this);
+        registerReceiver(receiver, intentFilter);
+        handler.postDelayed(LocationUpdaterRunnable, 100);
 
+    }
     @Override
     protected void onRestart() {
         Fragment frag = getFragmentManager().findFragmentByTag("services");
@@ -254,7 +264,7 @@ public class WiFiServiceDiscoveryActivity extends FragmentActivity implements
                 byte[] readBuf = (byte[]) msg.obj;
                 String readMessage = new String(readBuf, 0, msg.arg1);
                 Log.d(TAG, readMessage);
-                (chatFragment).pushMessage("NotMe: " + readMessage);
+                (chatFragment).pushMessage("Guest: " + readMessage);
                 break;
             case MY_HANDLE:
                 Object obj = msg.obj;
@@ -262,16 +272,11 @@ public class WiFiServiceDiscoveryActivity extends FragmentActivity implements
         }
         return true;
     }
-    @Override
-    public void onResume() {
-        super.onResume();
-        receiver = new WiFiDirectBroadcastReceiver(manager, channel, this);
-        registerReceiver(receiver, intentFilter);
 
-    }
 
     @Override
     public void onPause() {
+        handler.removeCallbacks(LocationUpdaterRunnable);
         super.onPause();
         unregisterReceiver(receiver);
 
@@ -309,8 +314,7 @@ public class WiFiServiceDiscoveryActivity extends FragmentActivity implements
 
 
     public void onClick(View v) {
-        Toast.makeText(getApplicationContext(),"Долгота: " +gps.getLocation(this).getLongitude()
-                +" Широта: " +gps.getLocation(this).getLatitude(),Toast.LENGTH_LONG).show();
+
         }
 
 //    @Override

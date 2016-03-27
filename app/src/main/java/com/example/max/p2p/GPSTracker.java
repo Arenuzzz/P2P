@@ -34,9 +34,9 @@ public class GPSTracker extends Activity implements LocationListener {
     double latitude; // latitude
     double longitude; // longitude
 
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 10 meters
 
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
+    private static final long MIN_TIME_BW_UPDATES = 1; // 1 minute
 
     protected LocationManager locationManager;
 
@@ -167,6 +167,7 @@ public class GPSTracker extends Activity implements LocationListener {
         this.location = currentLocation;
         getLatitude();
         getLongitude();
+
     }
 
     @Override
