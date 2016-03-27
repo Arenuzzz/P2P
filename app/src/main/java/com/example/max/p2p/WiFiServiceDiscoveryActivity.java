@@ -95,6 +95,7 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
         servicesList = new WiFiDirectServicesList();
         getFragmentManager().beginTransaction()
                 .add(R.id.container_root, servicesList, "services").commit();
+
         // gps = new GPSTracker(this);
         //GPSTracker gsp = new GPSTracker(this);
         //gsp.Show();
