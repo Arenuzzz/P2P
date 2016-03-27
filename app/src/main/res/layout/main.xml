@@ -10,15 +10,27 @@
         android:layout_height="fill_parent"
         android:layout_gravity="top"
         android:orientation="vertical" />
+    <!--<fragment-->
+        <!--android:id="@+id/gmap"-->
+        <!--android:layout_width="400dp"-->
+        <!--android:layout_height="400dp"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:layout_marginTop="300dp"-->
+        <!--android:name="com.google.android.gms.maps.SupportMapFragment">-->
+    <!--</fragment>-->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/location"/>
+        android:textSize="20sp"
+        android:id="@+id/location"
+        android:layout_gravity="bottom" />
+
     <TextView
         android:id="@+id/status_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom" >
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="20dp">
     </TextView>
 
 

@@ -23,7 +23,7 @@ public class GPSTracker extends Activity implements LocationListener {
     private final Context mContext;
 
 
-    TextView locationTxt;
+
     // flag for GPS status
     boolean isGPSEnabled = false;
     // flag for network status
@@ -34,16 +34,16 @@ public class GPSTracker extends Activity implements LocationListener {
     double latitude; // latitude
     double longitude; // longitude
 
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 0; // 10 meters
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
 
-    private static final long MIN_TIME_BW_UPDATES = 0; // 1 minute
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
 
     protected LocationManager locationManager;
 
     public GPSTracker(Context context) {
         this.mContext = context;
         getLocation(this);
-       locationTxt = (TextView)findViewById(R.id.location);
+
 
     }
 
@@ -159,10 +159,7 @@ public class GPSTracker extends Activity implements LocationListener {
 
         alertDialog.show();
     }
-    public void Show()
-    {
-        locationTxt.setText("Долгота: " + longitude + " Широта: " + latitude + " ");
-    }
+
 
     @Override
     public void onLocationChanged(Location currentLocation) {
@@ -170,11 +167,6 @@ public class GPSTracker extends Activity implements LocationListener {
         this.location = currentLocation;
         getLatitude();
         getLongitude();
-        Show();
-
-
-
-
     }
 
     @Override

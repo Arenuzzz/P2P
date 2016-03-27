@@ -45,7 +45,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
 
-public class WiFiServiceDiscoveryActivity extends Activity implements
+public class WiFiServiceDiscoveryActivity extends FragmentActivity implements
         DeviceClickListener, Handler.Callback, MessageTarget,
         ConnectionInfoListener, View.OnClickListener {
 
@@ -65,7 +65,8 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
     private WiFiChatFragment chatFragment;
     private WiFiDirectServicesList servicesList;
     private TextView statusTxtView;
-    private GoogleMap mMap;
+    private GoogleMap map;
+    TextView locationTxt;
 //    Button btnShowLocation;
     GPSTracker gps;
     static final LatLng TutorialsPoint = new LatLng(21 , 57);
@@ -83,6 +84,7 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         statusTxtView = (TextView) findViewById(R.id.status_text);
+        locationTxt = (TextView)findViewById(R.id.location);
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
@@ -96,7 +98,9 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
         getFragmentManager().beginTransaction()
                 .add(R.id.container_root, servicesList, "services").commit();
 
-        // gps = new GPSTracker(this);
+        gps = new GPSTracker(this);
+        locationTxt.setText("Longitude: " + gps.getLongitude() + " Latitude: " + gps.getLatitude() + " ");
+
         //GPSTracker gsp = new GPSTracker(this);
         //gsp.Show();
 //        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -145,7 +149,7 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 
             @Override
             public void onFailure(int error) {
-                appendStatus("Failed to add a service");
+                appendStatus("");
             }
         });
         discoverService();
@@ -201,7 +205,7 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 
                     @Override
                     public void onFailure(int arg0) {
-                        appendStatus("Failed adding service discovery request");
+                        appendStatus("");
                     }
                 });
         manager.discoverServices(channel, new ActionListener() {
@@ -212,7 +216,7 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
 
             @Override
             public void onFailure(int arg0) {
-                appendStatus("Service discovery failed");
+                appendStatus("");
             }
         });
     }
@@ -250,7 +254,7 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
                 byte[] readBuf = (byte[]) msg.obj;
                 String readMessage = new String(readBuf, 0, msg.arg1);
                 Log.d(TAG, readMessage);
-                (chatFragment).pushMessage("User: " + readMessage);
+                (chatFragment).pushMessage("NotMe: " + readMessage);
                 break;
             case MY_HANDLE:
                 Object obj = msg.obj;
@@ -263,11 +267,6 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
         super.onResume();
         receiver = new WiFiDirectBroadcastReceiver(manager, channel, this);
         registerReceiver(receiver, intentFilter);
-
-
-
-
-
 
     }
 

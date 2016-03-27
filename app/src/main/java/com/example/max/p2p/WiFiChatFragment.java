@@ -38,7 +38,7 @@ public class WiFiChatFragment extends Fragment {
                         if (chatManager != null) {
                             chatManager.write(chatLine.getText().toString()
                                     .getBytes());
-                            pushMessage("I: " + chatLine.getText().toString());
+                            pushMessage("Me: " + chatLine.getText().toString());
                             chatLine.setText("");
                             chatLine.clearFocus();
                         }
@@ -78,7 +78,7 @@ public class WiFiChatFragment extends Fragment {
                         .findViewById(android.R.id.text1);
                 if (nameText != null) {
                     nameText.setText(message);
-                    if (message.startsWith("I:")) {
+                    if (message.startsWith("Me:")) {
                         nameText.setTextAppearance((getActivity()),R.style.normalText);
                     } else {
                         nameText.setTextAppearance((getActivity()),R.style.boldText);
